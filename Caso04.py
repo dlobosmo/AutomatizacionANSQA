@@ -14,7 +14,7 @@ import HtmlTestRunner
 from openpyxl import load_workbook
 
 
-def test01_condominio():
+def test04_condominio():
     # Especificamos el nombre y la ruta del archivo de datos a leer
     filesheet = "..\Datos\Datos_Condominio.xlsx"
 
@@ -50,17 +50,12 @@ def test01_condominio():
     chrome_driver.save_screenshot('..\Screenshot\CP04\Inicio_Sesion.png')
     elem.send_keys(Keys.RETURN)
 
-
-
-    # chrome_driver.switch_to.frame(1)
-    elem = chrome_driver.find_element_by_xpath("//*[@id='app']")
-    elem = chrome_driver.find_element_by_xpath("//*[@id='app']/div")
-    elem = chrome_driver.find_element_by_xpath("//*[@id='app']/div/div[1]").is_selected()
-    # sleep(5)
-    wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "//*[@id='app']/div/div[1]/div[2]/div[1]")))
-    elem = chrome_driver.find_element_by_xpath("//*[@id='app']/div/div[1]/div[2]/div[1]").click()
-    elem = chrome_driver.find_element_by_xpath("//*[@id='app']/div/div[1]/div[2]/div[1]/span/div[8]/span").click()
-    elem = chrome_driver.find_element_by_xpath("//*[@id='app']/div/div[1]/div[2]/div[1]/span/div[8]/div/a[17]").click()
+    # Voy a pinchar opción Mantenedores en el menú
+    wait = WebDriverWait(chrome_driver, 120)
+    wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "//span[text()='Mantenedores']")))
+    elem = chrome_driver.find_element_by_xpath("//span[text()='Mantenedores']").click()
+    # Acá llama a la opción Ramo Wizard pero con menú extendido
+    elem = chrome_driver.find_element_by_xpath("//a[text()='Condominio']").click()
     chrome_driver.save_screenshot('..\Screenshot\CP04\Home_Sistema.png')
 
     # sleep(10)
@@ -106,12 +101,16 @@ def test01_condominio():
     chrome_driver.find_element_by_xpath("//input[@id='PerAsegurado_Identificacion']").send_keys(Keys.RETURN)
     sleep(1)
     chrome_driver.find_element_by_xpath("//input[@id='PerAsegurado_Identificacion']").send_keys(Keys.TAB)
-
-    # Validacion despliegue de razon social
+    # Ingreso de razon social
     elemRazonSocial = chrome_driver.find_element_by_xpath("//input[@id='PerAsegurado_RazonSocial']")
-    sleep(1)
-    assert elemRazonSocial.get_attribute('value') == RazonSocial
-    sleep(2)
+    if (elemRazonSocial.get_attribute('value') == ''):
+        elemRazonSocial.clear()
+        elemRazonSocial.send_keys(RazonSocial)
+        sleep(1)
+    else:
+        #assert elemRazonSocial.get_attribute('value') == RazonSocial
+        print(elemRazonSocial.get_attribute('value'))
+        sleep(2)
     # Ingreso de Nro Reserva BCI
     chrome_driver.find_element_by_id("NReservaBCI_Texto").location_once_scrolled_into_view
     chrome_driver.find_element_by_id("NReservaBCI_Texto").click()
@@ -133,8 +132,8 @@ def test01_condominio():
     chrome_driver.find_element_by_id("Direccion_Texto").click()
     chrome_driver.find_element_by_id("Direccion_Texto").clear()
     chrome_driver.find_element_by_id("Direccion_Texto").send_keys(Direccion)
-    wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "//div[@id='ui-id-6']")))
-    chrome_driver.find_element_by_xpath("//div[@id='ui-id-6']").click()
+    wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "//div[@id='ui-id-2']")))
+    chrome_driver.find_element_by_xpath("//div[@id='ui-id-2']").click()
     sleep(1)
     chrome_driver.save_screenshot('..\Screenshot\CP04\Parte01_FormularioCondominio.png')
     # Seleccion tipo de construccion
@@ -185,35 +184,33 @@ def test01_condominio():
     #chrome_driver.find_element_by_xpath("//input[@id='NumTrabajadores_Texto']").click()
     #chrome_driver.find_element_by_xpath("//input[@id='NumTrabajadores_Texto']").clear()
     #chrome_driver.find_element_by_xpath("//input[@id='NumTrabajadores_Texto']").send_keys(NTrabajadores)
-    # Seleccionar tipo de medio de pago
-    chrome_driver.find_element_by_xpath("//span[@id='select2-TipoMedioPago-container']").click()
-    sleep(1)
-    chrome_driver.find_element_by_xpath("(//input[@type='search'])[2]").send_keys(FormaPago)
-    sleep(1)
-    chrome_driver.find_element_by_xpath("(//input[@type='search'])[2]").send_keys(Keys.ENTER)
-    sleep(1)
-    # Seleccionar el Nro de cuotas
-    chrome_driver.find_element_by_xpath("//span[@id='select2-Cuotas-container']").click()
-    sleep(1)
-    chrome_driver.find_element_by_xpath("(//input[@type='search'])[2]").send_keys(NCuotas)
-    sleep(1)
-    chrome_driver.find_element_by_xpath("(//input[@type='search'])[2]").send_keys(Keys.ENTER)
-    sleep(1)
-    chrome_driver.save_screenshot('..\Screenshot\CP04\Parte03_FormularioCondominio.png')
-    chrome_driver.find_element_by_xpath("//div[@id='wizCondominio']/section[2]/div[6]/a[6]").click()
-    sleep(2)
-    chrome_driver.save_screenshot('..\Screenshot\CP04\Envio_FormularioCondominio.png')
 
-    #Cierra mensaje de alerta
-    wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "(//a[@onclick='closeAlert(tarificarUiJs.mostrarMensajeEplacement)'])[4]")))
-    chrome_driver.save_screenshot('..\Screenshot\CP04\Cierre_MensajeAlerta.png')
-    sleep(2)
-    chrome_driver.find_element_by_xpath("(//a[@onclick='closeAlert(tarificarUiJs.mostrarMensajeEplacement)'])[4]").click()
-    sleep(2)
-    print(chrome_driver.find_element_by_xpath("//div[@id='Tarificacion.Dto']/div[2]/div/label/span").get_attribute('value'))
-    chrome_driver.find_element_by_xpath("//div[@id='toolsActionsOferta']/div[2]/span").click()
-    sleep(5)
-    chrome_driver.save_screenshot('..\Screenshot\CP04\Descarga_PDF.png')
+    elementMedioPago = chrome_driver.find_element_by_xpath("//span[@id='select2-TipoMedioPago-container']")
+    if (not elementMedioPago):
+        chrome_driver.save_screenshot('..\Screenshot\CP04\Parte03_FormularioCondominio.png')
+        chrome_driver.find_element_by_xpath("//div[@id='wizCondominio']/section[2]/div[6]/a[6]").click()
+        sleep(2)
+    else:
+        # Seleccionar tipo de medio de pago
+        chrome_driver.find_element_by_xpath("//span[@id='select2-TipoMedioPago-container']").click()
+        sleep(1)
+        chrome_driver.find_element_by_xpath("(//input[@type='search'])[2]").send_keys(FormaPago)
+        sleep(1)
+        chrome_driver.find_element_by_xpath("(//input[@type='search'])[2]").send_keys(Keys.ENTER)
+        sleep(1)
+        # Seleccionar el Nro de cuotas
+        chrome_driver.find_element_by_xpath("//span[@id='select2-Cuotas-container']").click()
+        sleep(1)
+        chrome_driver.find_element_by_xpath("(//input[@type='search'])[2]").send_keys(NCuotas)
+        sleep(1)
+        chrome_driver.find_element_by_xpath("(//input[@type='search'])[2]").send_keys(Keys.ENTER)
+        sleep(1)
+        # Enviar formulario
+        chrome_driver.save_screenshot('..\Screenshot\CP04\Parte03_FormularioCondominio.png')
+        chrome_driver.find_element_by_xpath("//div[@id='wizCondominio']/section[2]/div[6]/a[6]").click()
+    sleep(60)
+    chrome_driver.save_screenshot('..\Screenshot\CP04\Envio_FormularioCondominio.png')
+    sleep(1)
     chrome_driver.close()
 
 
