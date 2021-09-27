@@ -219,8 +219,9 @@ def test02_condominio():
     sleep(2)
     print(chrome_driver.find_element_by_xpath("//div[@id='Tarificacion.Dto']/div[2]/div/label/span").get_attribute('value'))
     chrome_driver.find_element_by_xpath("//div[@id='toolsActionsOferta']/div[2]/span").click()
-    sleep(5)
     chrome_driver.save_screenshot('..\Screenshot\CP02\Descarga_PDF.png')
+    sleep(20)
+    chrome_driver.save_screenshot('..\Screenshot\CP02\Documento_PDF.png')
     chrome_driver.close()
 
 

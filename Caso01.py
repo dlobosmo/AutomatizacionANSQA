@@ -35,7 +35,7 @@ def test01_condominio():
     email = sheet['A2'].value
     passw = sheet['B2'].value
 
-    wait = WebDriverWait(chrome_driver, 70)
+    wait = WebDriverWait(chrome_driver, 120)
     wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "//input[@id='login-password']")))
 
     # Se ingresa el usuario del sistema
@@ -216,8 +216,9 @@ def test01_condominio():
     sleep(2)
     print(chrome_driver.find_element_by_xpath("//div[@id='Tarificacion.Dto']/div[2]/div/label/span").get_attribute('value'))
     chrome_driver.find_element_by_xpath("//div[@id='toolsActionsOferta']/div[2]/span").click()
-    sleep(5)
     chrome_driver.save_screenshot('..\Screenshot\CP01\Descarga_PDF.png')
+    sleep(20)
+    chrome_driver.save_screenshot('..\Screenshot\CP01\Documento_PDF.png')
     chrome_driver.close()
 
 

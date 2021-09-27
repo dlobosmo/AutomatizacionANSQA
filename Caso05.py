@@ -208,9 +208,15 @@ def test05_condominio():
         # Enviar formulario
         chrome_driver.save_screenshot('..\Screenshot\CP05\Parte03_FormularioCondominio.png')
         chrome_driver.find_element_by_xpath("//div[@id='wizCondominio']/section[2]/div[6]/a[6]").click()
-    sleep(60)
+    sleep(1)
     chrome_driver.save_screenshot('..\Screenshot\CP05\Envio_FormularioCondominio.png')
     sleep(1)
+
+    # Validacion y Cierra mensaje de alerta
+    wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "(//a[@onclick='closeAlert(tarificarUiJs.mostrarMensajeEplacement)'])[4]")))
+    chrome_driver.save_screenshot('..\Screenshot\CP05\MensajeAlerta.png')
+    sleep(2)
+    chrome_driver.find_element_by_xpath("(//a[@onclick='closeAlert(tarificarUiJs.mostrarMensajeEplacement)'])[4]").click()
 
     chrome_driver.close()
 

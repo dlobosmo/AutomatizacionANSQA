@@ -38,7 +38,7 @@ def test06_condominio():
     email = sheet['A2'].value
     passw = sheet['B2'].value
 
-    wait = WebDriverWait(chrome_driver, 70)
+    wait = WebDriverWait(chrome_driver, 120)
     wait.until(expected_conditions.element_to_be_clickable((By.XPATH, "//input[@id='login-password']")))
 
     # Se ingresa el usuario del sistema
@@ -96,7 +96,9 @@ def test06_condominio():
     NTrabajadores = sheet['T7'].value
     FormaPago = sheet['V7'].value
     NCuotas = sheet['W7'].value
-    Minuta= sheet['AB7'].value
+    Minuta= sheet['AC7'].value
+    NroTelefono = sheet['AE7'].value
+    Email = sheet['AI7'].value
 
     # Ingreso de rut empresa
     chrome_driver.find_element_by_xpath("//input[@id='PerAsegurado_Identificacion']").clear()
@@ -113,7 +115,8 @@ def test06_condominio():
         sleep(1)
     else:
         sleep(1)
-        assert elemRazonSocial.get_attribute('value') == RazonSocial
+        #assert elemRazonSocial.get_attribute('value') == RazonSocial
+        print(elemRazonSocial.get_attribute('value'))
         sleep(2)
     # Ingreso de Nro Reserva BCI
     chrome_driver.find_element_by_id("NReservaBCI_Texto").location_once_scrolled_into_view
@@ -238,6 +241,20 @@ def test06_condominio():
     sleep(1)
     chrome_driver.save_screenshot('..\Screenshot\CP06\Paso3_Parte1_CompletarDatos.png')
     sleep(1)
+    # Validacion de telefono si no existe
+    elemtTelefono = chrome_driver.find_element_by_xpath("//input[@id='DatosAsegurado_Contacto_ContactoCelular']")
+    elemtTelefono.click()
+    elemtTelefono.clear()
+    elemtTelefono.send_keys(NroTelefono)
+    sleep(1)
+
+    # Validación de email si no existe
+    elemtEmail = chrome_driver.find_element_by_xpath("//input[@id='DatosAsegurado_Contacto_ContactoEmail']")
+    elemtEmail.click()
+    elemtEmail.clear()
+    elemtEmail.send_keys(Email)
+    sleep(1)
+
     #Ingreso de información en campo minuta
     chrome_driver.find_element_by_xpath("//textarea[@name='minuta']").location_once_scrolled_into_view
     chrome_driver.find_element_by_xpath("//textarea[@name='minuta']").click()
@@ -270,7 +287,7 @@ def test06_condominio():
     sleep(1)
     # Descargar poliza
     chrome_driver.find_element_by_xpath("//a[@id='btnDownloadPoliza']/span").click()
-    sleep(60)
+    sleep(80)
     chrome_driver.save_screenshot('..\Screenshot\CP06\ValidacionDescarga.png')
 
     chrome_driver.close()
